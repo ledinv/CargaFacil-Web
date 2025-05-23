@@ -2,6 +2,11 @@ let autocompleteOrigen, autocompleteDestino;
 let map, directionsRenderer;
 const paisesPermitidos = ['Honduras', 'Guatemala', 'El Salvador'];
 
+function iniciarGoogleMaps() {
+  initMap();
+  initAutocomplete();
+}
+
 function initAutocomplete() {
   autocompleteOrigen = new google.maps.places.Autocomplete(document.getElementById('origen'));
   autocompleteDestino = new google.maps.places.Autocomplete(document.getElementById('destino'));
@@ -41,9 +46,6 @@ function usarUbicacion(inputId) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initAutocomplete();
-  initMap();
-
   const tipoServicio = document.getElementById("tipo-servicio");
   const camposDinamicos = document.getElementById("campos-dinamicos");
 
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const duracionSegundos = result.routes[0].legs[0].duration_in_traffic.value;
         const minutos = Math.ceil(duracionSegundos / 60);
-        const tarifa = 18;
+        const tarifa = 17;
         const total = minutos * tarifa;
 
         document.getElementById("resultado").innerHTML =
