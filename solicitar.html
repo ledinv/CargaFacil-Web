@@ -77,6 +77,33 @@
           ? `<label for="vehiculo">Tipo de vehículo:</label><input type="text" id="vehiculo" name="vehiculo" required />`
           : `<label for="carga">Tipo de carga:</label><input type="text" id="carga" name="carga" required />`;
       });
+
+      document.getElementById("form-servicio").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const origen = document.getElementById("origen").value;
+        const destino = document.getElementById("destino").value;
+
+        const service = new google.maps.DirectionsService();
+        service.route({
+          origin: origen,
+          destination: destino,
+          travelMode: google.maps.TravelMode.DRIVING,
+          drivingOptions: {
+            departureTime: new Date(),
+            trafficModel: 'best_guess'
+          }
+        }, (result, status) => {
+          if (status === "OK") {
+            const duracionSegundos = result.routes[0].legs[0].duration_in_traffic.value;
+            const minutos = Math.ceil(duracionSegundos / 60);
+            const tarifa = 17;
+            const total = minutos * tarifa;
+            document.getElementById("resultado").innerHTML = `<strong>Duración estimada:</strong> ${minutos} minutos<br><strong>Total:</strong> L ${total}`;
+          } else {
+            alert("No se pudo calcular la ruta: " + status);
+          }
+        });
+      });
     });
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVU55Fqklut8xkmurlbdzOhlQd78pbVMM&libraries=places&callback=initAutocomplete" async defer></script>
