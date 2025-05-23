@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitar Servicio - CargaFácil</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <img src="img/logo-cargafacil.svg" alt="Logo" class="logo" />
+    <h1>Solicitar Servicio</h1>
+  </header>
+
+  <main class="hero">
+    <form id="form-servicio">
+      <label for="tipo-servicio">Tipo de servicio:</label>
+      <select id="tipo-servicio" name="tipo-servicio" required>
+        <option value="grua">Grúa</option>
+        <option value="flete">Flete</option>
+      </select>
+
+      <label for="origen">Ubicación de recogida:</label>
+      <input type="text" id="origen" name="origen" placeholder="Ej. Barrio Cabañas" required />
+
+      <label for="destino">Destino:</label>
+      <input type="text" id="destino" name="destino" placeholder="Ej. Colonia El Álamo" required />
+
+      <label for="detalle">Tipo de carga (si aplica):</label>
+      <input type="text" id="detalle" name="detalle" placeholder="Ej. Refrigeradora, Motocicleta..." />
+
+      <button type="submit">Calcular costo estimado</button>
+    </form>
+
+    <div id="resultado" style="margin-top: 1.5rem;"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 CargaFácil.com - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="script/main.js"></script>
+</body>
+</html>
