@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contáctanos - CargaFácil</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <img src="img/logo-cargafacil.svg" alt="Logo" class="logo" />
+    <h1>Contáctanos</h1>
+  </header>
+
+  <main class="hero">
+    <p>Este formulario está diseñado para que empresas de grúas, choferes o usuarios puedan enviarnos consultas, unirse a la red o resolver dudas.</p>
+
+    <form id="form-contacto">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="correo" required />
+
+      <label for="tipo">Tipo de consulta:</label>
+      <select id="tipo" name="tipo" required>
+        <option value="empresa">Soy empresa de grúas</option>
+        <option value="chofer">Soy chofer independiente</option>
+        <option value="usuario">Soy usuario/cliente</option>
+        <option value="otro">Otro</option>
+      </select>
+
+      <label for="mensaje">Mensaje:</label>
+      <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+      <button type="submit">Enviar consulta</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 CargaFácil.com - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="script/main.js"></script>
+</body>
+</html>
