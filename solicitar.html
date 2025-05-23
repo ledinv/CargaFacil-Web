@@ -18,13 +18,14 @@
       </select>
 
       <label for="origen">Ubicación de recogida:</label>
-      <input type="text" id="origen" name="origen" placeholder="Ej. Barrio Cabañas" required />
+      <input id="origen" name="origen" type="text" placeholder="Ej. Barrio Cabañas" required />
+      <button type="button" onclick="usarUbicacion('origen')">📍 Usar mi ubicación</button>
 
       <label for="destino">Destino:</label>
-      <input type="text" id="destino" name="destino" placeholder="Ej. Colonia El Álamo" required />
+      <input id="destino" name="destino" type="text" placeholder="Ej. Colonia El Álamo" required />
+      <button type="button" onclick="usarUbicacion('destino')">📍 Usar mi ubicación</button>
 
-      <label for="detalle">Tipo de carga (si aplica):</label>
-      <input type="text" id="detalle" name="detalle" placeholder="Ej. Refrigeradora, Motocicleta..." />
+      <div id="campos-dinamicos"></div>
 
       <button type="submit">Calcular costo estimado</button>
     </form>
@@ -35,6 +36,49 @@
   <footer></footer>
 
   <script src="script/includeHeaderFooter.js"></script>
-  <script src="script/main.js"></script>
+  <script>
+    let autocompleteOrigen, autocompleteDestino;
+    const paisesPermitidos = ['Honduras', 'Guatemala', 'El Salvador'];
+
+    function initAutocomplete() {
+      autocompleteOrigen = new google.maps.places.Autocomplete(document.getElementById('origen'));
+      autocompleteDestino = new google.maps.places.Autocomplete(document.getElementById('destino'));
+    }
+
+    function usarUbicacion(inputId) {
+      if (!navigator.geolocation) return alert("Tu navegador no permite geolocalización.");
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+          if (status === 'OK') {
+            const pais = results[0].address_components.find(c => c.types.includes("country")).long_name;
+            if (!paisesPermitidos.includes(pais)) {
+              return alert(`Actualmente solo operamos en Honduras, Guatemala y El Salvador (Detectado: ${pais})`);
+            }
+            document.getElementById(inputId).value = results[0].formatted_address;
+          } else {
+            alert("No se pudo obtener la dirección.");
+          }
+        });
+      }, () => {
+        alert("No se pudo obtener tu ubicación.");
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const tipoServicio = document.getElementById("tipo-servicio");
+      const camposDinamicos = document.getElementById("campos-dinamicos");
+
+      tipoServicio.addEventListener("change", () => {
+        const tipo = tipoServicio.value;
+        camposDinamicos.innerHTML = tipo === "grua"
+          ? `<label for="vehiculo">Tipo de vehículo:</label><input type="text" id="vehiculo" name="vehiculo" required />`
+          : `<label for="carga">Tipo de carga:</label><input type="text" id="carga" name="carga" required />`;
+      });
+    });
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVU55Fqklut8xkmurlbdzOhlQd78pbVMM&libraries=places&callback=initAutocomplete" async defer></script>
 </body>
 </html>
