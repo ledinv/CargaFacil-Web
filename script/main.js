@@ -50,8 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       destination: destino,
       travelMode: google.maps.TravelMode.DRIVING,
       drivingOptions: {
-        departureTime: new Date(),
-        trafficModel: 'best_guess'
+        departureTime: new Date()  // ✅ Se quitó trafficModel para evitar error
       }
     }, (result, status) => {
       if (status === "OK") {
