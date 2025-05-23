@@ -1,9 +1,21 @@
 let autocompleteOrigen, autocompleteDestino;
+let map, directionsRenderer;
 const paisesPermitidos = ['Honduras', 'Guatemala', 'El Salvador'];
 
 function initAutocomplete() {
   autocompleteOrigen = new google.maps.places.Autocomplete(document.getElementById('origen'));
   autocompleteDestino = new google.maps.places.Autocomplete(document.getElementById('destino'));
+}
+
+function initMap() {
+  const centroHonduras = { lat: 15.5, lng: -88.0 };
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 7,
+    center: centroHonduras
+  });
+
+  directionsRenderer = new google.maps.DirectionsRenderer();
+  directionsRenderer.setMap(map);
 }
 
 function usarUbicacion(inputId) {
@@ -29,6 +41,9 @@ function usarUbicacion(inputId) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initAutocomplete();
+  initMap();
+
   const tipoServicio = document.getElementById("tipo-servicio");
   const camposDinamicos = document.getElementById("campos-dinamicos");
 
@@ -44,20 +59,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const origen = document.getElementById("origen").value;
     const destino = document.getElementById("destino").value;
 
+    if (!origen || !destino) {
+      return alert("Debes ingresar origen y destino.");
+    }
+
     const service = new google.maps.DirectionsService();
-    service.route({
+    const request = {
       origin: origen,
       destination: destino,
       travelMode: google.maps.TravelMode.DRIVING,
       drivingOptions: {
-        departureTime: new Date()  // ✅ Se quitó trafficModel para evitar error
+        departureTime: new Date()
       }
-    }, (result, status) => {
+    };
+
+    service.route(request, (result, status) => {
       if (status === "OK") {
+        directionsRenderer.setDirections(result);
+
         const duracionSegundos = result.routes[0].legs[0].duration_in_traffic.value;
         const minutos = Math.ceil(duracionSegundos / 60);
-        const tarifa = 17;
+        const tarifa = 18;
         const total = minutos * tarifa;
+
         document.getElementById("resultado").innerHTML =
           `<strong>Duración estimada:</strong> ${minutos} minutos<br><strong>Total:</strong> L ${total}`;
       } else {
